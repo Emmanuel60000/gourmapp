@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <footer className="fixed bottom-0 left-0 right-0 bg-white shadow-md">
+    <footer className="fixed bottom-0 left-0 right-0 bg-white shadow-md z-10">
       <nav className="flex justify-around items-center h-16">
         <Link href="/" className="flex flex-col items-center text-orange-600">
           <Home size={24} />
