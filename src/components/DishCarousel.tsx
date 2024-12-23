@@ -7,11 +7,11 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 const dishes = [
-  { id: 1, name: 'Spaghetti Carbonara', image: '/logo.jpg?height=300&width=400' },
-  { id: 2, name: 'Steak Frites', image: '/logo.jpg?height=300&width=400' },
-  { id: 3, name: 'Sushi Platter', image: '/logo.jpg?height=300&width=400' },
-  { id: 4, name: 'Caesar Salad', image: '/logo.jpg?height=300&width=400' },
-  { id: 5, name: 'Margherita Pizza', image: '/logo.jpg?height=300&width=400' },
+  { id: 1, image: '/plat1.jpg' },
+  { id: 2, image: '/plat2.jpg' },
+  { id: 3, image: '/plat3.jpg' },
+  { id: 4, image: '/plat4.jpg' },
+  { id: 5, image: '/plat5.jpg' },
 ];
 
 export default function DishCarousel() {
@@ -37,22 +37,29 @@ export default function DishCarousel() {
   };
 
   return (
-    <div className="w-full bg-orange-50"> {/* Fond orange uniquement ici */}
-      <div className="max-w-3xl mx-auto my-8"> {/* Pas de bg appliqué */}
+    <div className="w-full overflow-hidden ">
+      {/* Conteneur principal avec largeur maximale */}
+      <div className="max-w-6xl mx-auto my-8 px-4">
+        {/* Titre ajouté */}
+        <h2 className="text-3xl font-bold text-center text-customError mb-6 font-inknut">
+          Offres et Promos
+        </h2>
         <Slider {...settings}>
           {dishes.map((dish) => (
-            <div key={dish.id} className="px-2">
-              <div className="relative h-64 md:h-80 rounded-lg overflow-hidden bg-transparent"> {/* Assurez-vous que bg-transparent est appliqué ici */}
+            <div key={dish.id}>
+              {/* Maintenir les ratios d'aspect carrés ou vidéos */}
+              <div className="relative w-full aspect-square sm:aspect-video">
                 <Image
                   src={dish.image}
-                  alt={dish.name}
-                  layout="fill"
-                  objectFit="cover"
+                  alt={`Dish ${dish.id}`}
+                  fill
+                  sizes="100vw"
+                  style={{
+                    objectFit: 'contain',
+                    objectPosition: 'center',
+                  }}
                   className="transition-transform duration-300 hover:scale-105"
                 />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-                  <h3 className="text-white text-xl font-semibold">{dish.name}</h3>
-                </div>
               </div>
             </div>
           ))}
@@ -61,4 +68,3 @@ export default function DishCarousel() {
     </div>
   );
 }
-

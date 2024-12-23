@@ -105,14 +105,14 @@ export default function RestaurantMap() {
   }, [])
 
   return (
-    <div className="flex flex-col space-y-4 min-h-screen bg-[#fef5e7]">
-
+    <div className="flex flex-col space-y-4 min-h-screen ">
+  
       {/* Section des images et informations */}
       <div className="w-full overflow-hidden px-4">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-          Les restaurants populaires
+        <h2 className="text-3xl font-bold text-center text-customError mt-8 mb-16 font-inknut">
+          Restaurants populaires près de chez vous
         </h2>
-
+  
         {isLoading ? (
           <p>Chargement des données...</p>
         ) : error ? (
@@ -120,16 +120,20 @@ export default function RestaurantMap() {
         ) : restaurants.length === 0 ? (
           <p>Aucun restaurant trouvé.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {restaurants.slice(0, 6).map((restaurant) => (
-              <div key={restaurant.id} className="bg-white shadow-lg rounded-lg overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {restaurants.slice(0, 6).map((restaurant, index) => (
+              <div
+                key={restaurant.id}
+                className={`bg-white border border-gray-300 rounded-lg overflow-hidden shadow-lg transform transition-all duration-500 hover:shadow-2xl hover:scale-105 opacity-0 animate-fadeIn`}
+                style={{ animationDelay: `${index * 0.1}s` }} // Délai progressif pour chaque carte
+              >
                 <img
-                  src={restaurant.photo || ''}
+                  src={restaurant.photo || ""}
                   alt={restaurant.name}
-                  className="w-full h-40 object-cover"
+                  className="w-full h-40 object-cover transition-transform duration-500 hover:scale-110"
                 />
                 <div className="p-4">
-                  <h3 className="text-lg font-bold">{restaurant.name}</h3>
+                  <h3 className="text-xl font-semibold text-gray-800">{restaurant.name}</h3>
                   <p className="text-sm text-gray-600">{restaurant.address}</p>
                   <p className="text-yellow-500 font-semibold mt-2">
                     Note : {restaurant.rating} / 5
@@ -140,11 +144,11 @@ export default function RestaurantMap() {
           </div>
         )}
       </div>
-
+  
       {/* Bouton de géolocalisation */}
       <div className="px-4">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-          Localisateur de Restaurants
+        <h2 className="text-3xl font-bold text-customError mb-4 text-center font-inknut">
+          Localiser vos envies
         </h2>
         <p className="text-gray-600 text-center mb-4">
           Cliquez sur le bouton ci-dessous pour activer la géolocalisation et trouver les restaurants proches de votre emplacement.
@@ -152,20 +156,26 @@ export default function RestaurantMap() {
         <div className="text-center">
           <button
             onClick={handleGeolocation}
-            className="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-red-500"
+            className="px-6 py-2 bg-customHighlight text-white rounded-lg "
           >
             Activer la géolocalisation
           </button>
         </div>
       </div>
-{/* Section de la carte */}
-<div className="w-full h-[400px] flex justify-center px-4">
-  <div
-    ref={mapContainerRef}
-    className="h-full w-2/3 rounded-lg border bg-[#fef5e7]"
-  />
-</div>
-
+  
+      {/* Section de la carte */}
+      <div className="w-full h-[400px] sm:h-[500px] flex justify-center px-4">
+        <div
+          ref={mapContainerRef}
+          className="h-full w-full sm:w-2/3 rounded-lg border bg-[#fef5e7] relative z-[10]"
+        />
+      </div>
     </div>
-  )
+  );
+  
+  
+  
+  
+  
+  
 }

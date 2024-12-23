@@ -61,35 +61,43 @@ export default function SearchComponent() {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="flex-grow"
           />
-          <Button type="submit" className="bg-orange-500 hover:bg-orange-600 text-white">
+          <Button type="submit" className="bg-customHighlight text-white">
             <Search className="mr-2 h-4 w-4" /> Rechercher
           </Button>
         </div>
       </form>
-
+  
       {/* Résultats de la recherche */}
       <div className="space-y-6 pb-20">
-        <h2 className="text-2xl font-bold text-orange-800">Résultats de la recherche</h2>
-
+        <h2 className="text-2xl font-bold text-customError font-inknut">Résultats de la recherche</h2>
+  
         {isLoading ? (
           <p>Chargement des restaurants...</p>
         ) : error ? (
           <p className="text-red-500">{error}</p>
         ) : restaurants.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {restaurants.map((restaurant) => (
-              <div key={restaurant.id} className="p-4 bg-white border rounded-lg hover:shadow-md transition-shadow">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {restaurants.map((restaurant, index) => (
+              <div
+                key={restaurant.id}
+                className="bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md transform transition-all duration-500 hover:shadow-lg hover:scale-105 opacity-0 animate-fadeIn"
+                style={{ animationDelay: `${index * 0.1}s` }} // Délai progressif pour chaque carte
+              >
                 <img
-                  src={restaurant.photo || 'https://via.placeholder.com/400x200?text=Image+non+disponible'}
+                  src={
+                    restaurant.photo || 'https://via.placeholder.com/400x200?text=Image+non+disponible'
+                  }
                   alt={`Image de ${restaurant.name}`}
-                  className="w-full h-40 object-cover rounded-t-lg mb-4"
+                  className="w-full h-40 object-cover rounded-t-lg transition-transform duration-500 hover:scale-110"
                 />
-                <h3 className="text-xl font-semibold">{restaurant.name}</h3>
-                <p className="text-gray-600">{restaurant.cuisine}</p>
-                <p className="mt-2 text-sm text-gray-500 flex items-center">
-                  <MapPin className="h-4 w-4 mr-1" />
-                  {restaurant.address}
-                </p>
+                <div className="p-4">
+                  <h3 className="text-lg font-bold text-gray-800">{restaurant.name}</h3>
+                  <p className="text-sm text-gray-600">{restaurant.cuisine}</p>
+                  <p className="mt-2 text-sm text-gray-500 flex items-center">
+                    <MapPin className="h-4 w-4 mr-1 text-orange-500" />
+                    {restaurant.address}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
@@ -99,4 +107,5 @@ export default function SearchComponent() {
       </div>
     </div>
   );
+  
 }
