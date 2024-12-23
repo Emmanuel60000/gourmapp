@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Search, MapPin } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Restaurant } from '@/Services/placeServices'; // Assurez-vous que l'interface Restaurant est définie.
+import { Restaurant } from '@/Services/placeServices'; 
 
 export default function SearchComponent() {
   const [searchTerm, setSearchTerm] = useState('');

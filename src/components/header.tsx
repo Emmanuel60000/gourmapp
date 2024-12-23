@@ -30,7 +30,7 @@ export default function Header() {
     <header
       className={`${
         isMobile
-          ? 'h-[60vh] bg-[url("/logo.jpg")] bg-cover bg-center'
+          ? 'h-[60vh] bg-[url("/HeaderCard.svg")] bg-cover bg-center'
           : 'bg-gradient-to-r from-orange-500 to-red-500'
       } shadow-md p-4`}
     >
@@ -47,7 +47,7 @@ export default function Header() {
           {/* Lien ajouté autour du logo */}
           <Link href="/" passHref>
             <Image
-              src="/logo.jpg"
+              src="/logo.svg"
               alt="Logo"
               width={isMobile ? 100 : 50}
               height={isMobile ? 100 : 50}
