@@ -6,26 +6,38 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Restaurant } from '@/Services/placeServices'; 
 
+/**
+ * Composant de recherche permettant de trouver des restaurants par ville.
+ * L'utilisateur peut entrer le nom d'une ville et obtenir une liste de restaurants proches de cette localisation.
+ */
 export default function SearchComponent() {
+  // État pour suivre le terme de recherche saisi par l'utilisateur
   const [searchTerm, setSearchTerm] = useState('');
+  // État pour stocker les restaurants récupérés depuis l'API
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  // État pour indiquer si les données sont en cours de chargement
   const [isLoading, setIsLoading] = useState(false);
+  // État pour gérer les erreurs
   const [error, setError] = useState<string | null>(null);
 
+  // Fonction pour récupérer les restaurants à partir de l'API backend
   const fetchRestaurants = async (city: string) => {
     setIsLoading(true);
     setError(null);
 
     try {
+      // Envoi de la requête au backend avec le nom de la ville
       const response = await fetch(`/api/nearby-restaurants?city=${encodeURIComponent(city)}`);
       console.log('Réponse brut API backend:', response);
 
       if (!response.ok) {
+        // Gestion des erreurs si la réponse n'est pas valide
         const errorData = await response.json();
         console.error('Erreur renvoyée par le backend:', errorData);
         throw new Error(errorData.error || 'Erreur inconnue');
       }
 
+      // Traitement des données reçues
       const data = await response.json();
       console.log('Données reçues:', data);
 
@@ -35,6 +47,7 @@ export default function SearchComponent() {
 
       setRestaurants(data);
     } catch (err: any) {
+      // Gestion des erreurs pendant la récupération des données
       console.error('Erreur lors de la récupération des restaurants :', err.message);
       setError(err.message || 'Erreur inconnue');
     } finally {
@@ -42,6 +55,7 @@ export default function SearchComponent() {
     }
   };
 
+  // Fonction déclenchée lors de la soumission du formulaire
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm.trim()) {
@@ -107,5 +121,4 @@ export default function SearchComponent() {
       </div>
     </div>
   );
-  
 }

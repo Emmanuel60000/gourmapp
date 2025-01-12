@@ -1,3 +1,5 @@
+// Ce composant affiche une carte interactive des restaurants à proximité et permet à l'utilisateur d'activer la géolocalisation pour une recherche personnalisée.
+
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -7,17 +9,21 @@ import { useMap } from '../hooks/useMap'
 import { getNearbyRestaurants, Restaurant } from '../Services/placeServices'
 
 export default function RestaurantMap() {
-  const [latitude, setLatitude] = useState<number | null>(48.8566) // Latitude par défaut : Paris
-  const [longitude, setLongitude] = useState<number | null>(2.3522) // Longitude par défaut : Paris
+  // J'initialise la latitude et la longitude par défaut à Paris
+  const [latitude, setLatitude] = useState<number | null>(48.8566)
+  const [longitude, setLongitude] = useState<number | null>(2.3522)
+  // J'utilise un état pour stocker la liste des restaurants trouvés
   const [restaurants, setRestaurants] = useState<Restaurant[]>([])
+  // Gestion des erreurs et du chargement
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
+  // Centre et zoom de la carte
   const center: [number, number] = latitude && longitude ? [latitude, longitude] : [48.8566, 2.3522]
   const zoom = 12
   const { map, mapContainerRef } = useMap(center, zoom)
 
-  // Fonction pour activer la géolocalisation
+  // Fonction pour activer la géolocalisation de l'utilisateur
   const handleGeolocation = () => {
     if (!navigator.geolocation) {
       setError('La géolocalisation n’est pas prise en charge par votre navigateur.')
@@ -41,6 +47,7 @@ export default function RestaurantMap() {
     )
   }
 
+  // Recherche des restaurants à proximité après le montage de la carte et l'obtention des coordonnées
   useEffect(() => {
     if (!map || !latitude || !longitude) return
 
@@ -65,17 +72,18 @@ export default function RestaurantMap() {
     fetchRestaurants()
   }, [map, latitude, longitude])
 
+  // Gestion des marqueurs sur la carte après chaque mise à jour des restaurants
   useEffect(() => {
     if (!map) return
 
-    // Supprimer les marqueurs existants
+    // Je supprime les marqueurs existants
     map.eachLayer((layer) => {
       if (layer instanceof L.Marker) {
         map.removeLayer(layer)
       }
     })
 
-    // Ajouter les nouveaux marqueurs
+    // J'ajoute les nouveaux marqueurs pour chaque restaurant
     restaurants.forEach((restaurant) => {
       L.marker([restaurant.lat, restaurant.lng])
         .addTo(map)
@@ -88,14 +96,14 @@ export default function RestaurantMap() {
         )
     })
 
-    // Centrer la carte sur la position de l'utilisateur
+    // Je centre la carte sur la position de l'utilisateur
     if (latitude && longitude) {
       map.setView([latitude, longitude], zoom)
     }
   }, [map, restaurants, latitude, longitude, zoom])
 
+  // Correction de l'icône par défaut de Leaflet
   useEffect(() => {
-    // Correction de l'icône par défaut de Leaflet
     delete (L.Icon.Default.prototype as any)._getIconUrl
     L.Icon.Default.mergeOptions({
       iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon-2x.png',
@@ -104,15 +112,15 @@ export default function RestaurantMap() {
     })
   }, [])
 
+  // Rendu du composant
   return (
     <div className="flex flex-col space-y-4 min-h-screen ">
-  
       {/* Section des images et informations */}
       <div className="w-full overflow-hidden px-4">
         <h2 className="text-3xl font-bold text-center text-customError mt-8 mb-16 font-inknut">
           Restaurants populaires près de chez vous
         </h2>
-  
+
         {isLoading ? (
           <p>Chargement des données...</p>
         ) : error ? (
@@ -125,7 +133,7 @@ export default function RestaurantMap() {
               <div
                 key={restaurant.id}
                 className={`bg-white border border-gray-300 rounded-lg overflow-hidden shadow-lg transform transition-all duration-500 hover:shadow-2xl hover:scale-105 opacity-0 animate-fadeIn`}
-                style={{ animationDelay: `${index * 0.1}s` }} // Délai progressif pour chaque carte
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <img
                   src={restaurant.photo || ""}
@@ -144,7 +152,7 @@ export default function RestaurantMap() {
           </div>
         )}
       </div>
-  
+
       {/* Bouton de géolocalisation */}
       <div className="px-4">
         <h2 className="text-3xl font-bold text-customError mb-4 text-center font-inknut">
@@ -162,7 +170,7 @@ export default function RestaurantMap() {
           </button>
         </div>
       </div>
-  
+
       {/* Section de la carte */}
       <div className="w-full h-[400px] sm:h-[500px] flex justify-center px-4">
         <div
@@ -172,10 +180,4 @@ export default function RestaurantMap() {
       </div>
     </div>
   );
-  
-  
-  
-  
-  
-  
 }
